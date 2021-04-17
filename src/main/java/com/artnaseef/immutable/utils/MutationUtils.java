@@ -17,6 +17,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static com.artnaseef.immutable.utils.MutationResult.UNCHANGED_MUTATION_RESULT;
+
 /**
  * Utilities for mutating the state of complex immutable objects by copying existing objects where feasible, and
  * constructing new ones in the hierarchy, as-needed, to implement desired mutations.
@@ -282,6 +284,56 @@ public class MutationUtils {
      */
     public Mutator makeAnchoredPathMutator(Function<Supplier<Object>, Object> leafValueCalculator, Class earliestAncestorToCheck, String earliestPropertyNameToCheck, Object... more) {
         return this.mutatorUtils.makeAnchoredPathMutator(leafValueCalculator, earliestAncestorToCheck, earliestPropertyNameToCheck, more);
+    }
+
+    /**
+     * Convenience method for creating a mutator that applies the results of multiple mutators.  Note that WALK_CHILDREN
+     * takes precedence over CHANGED when merging results.
+     *
+     * @param mutators
+     * @return
+     */
+    public Mutator combineMutators(Mutator... mutators) {
+        return (LinkedList<Object> ancestry, LinkedList<String> propertyNames, Supplier valueSupplier) -> {
+            MutationResult finalResult = UNCHANGED_MUTATION_RESULT;
+
+            //
+            // Run the child mutators and choose the result to use.
+            //
+            for (Mutator oneMutator : mutators) {
+                MutationResult result = oneMutator.mutate(ancestry, propertyNames, valueSupplier);
+                finalResult = this.mergeMutationResults(finalResult, result);
+            }
+
+            return finalResult;
+        } ;
+    }
+
+    /**
+     * Merge the given mutation results.  WALK_CHILDREN takes priority and immediately returns
+     * since there is no other state associated with WALK_CHILDREN.  CHANGED has priority over UNCHANGED, with the last
+     * one present having priority over those preceding it.
+     *
+     * @param results the list of mutation results to merge.
+     * @return the resulting mutation chosen by the merge.
+     */
+    public MutationResult mergeMutationResults(MutationResult... results) {
+        MutationResult finalResult = UNCHANGED_MUTATION_RESULT;
+
+        //
+        // Walk all the given results and pick the one to use.
+        //
+        for (MutationResult oneResult : results) {
+            switch (oneResult.getResultType()) {
+                case WALK_CHILDREN:
+                    return oneResult;
+
+                case CHANGED:
+                    finalResult = oneResult;
+            }
+        }
+
+        return finalResult;
     }
 
 //========================================
@@ -551,9 +603,16 @@ public class MutationUtils {
     }
 
     private Method locateGetter(Class clazz, String fieldname) {
-        String getterName = "get" + fieldname.substring(0, 1).toUpperCase() + fieldname.substring(1);
+        String caseNormalizedFieldName = fieldname.substring(0, 1).toUpperCase() + fieldname.substring(1);
+        String getterName = "get" + caseNormalizedFieldName;
 
         Method method = this.getNamedMethodInHierarchy(clazz, getterName);
+
+        // Look for isField().  TODO: only if the field is a boolean or Boolean?
+        if (method == null) {
+            getterName = "is" + caseNormalizedFieldName;
+            method = this.getNamedMethodInHierarchy(clazz, getterName);
+        }
 
         return method;
     }

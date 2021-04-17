@@ -4,6 +4,8 @@ import com.artnaseef.immutable.utils.builder.MutationResultBuilder;
 
 public class MutationResult {
 
+    public static final MutationResult UNCHANGED_MUTATION_RESULT = new MutationResult(MutationResultType.UNCHANGED, null);
+
     private final MutationResultType resultType;
     private final Object replacementValue;
 
