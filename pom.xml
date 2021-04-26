@@ -25,7 +25,6 @@
     <packaging>jar</packaging>
 
     <name>Immutable Utils</name>
-    <url>https://github.com/artnaseef/immutable-utils</url>
 
     <description>
         Utilities for creating and maintaining immutable classes.
@@ -37,20 +36,6 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
-    <developers>
-        <developer>
-            <name>Arthur Naseef</name>
-            <email>artnaseef@apache.org</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git@github.com:artnaseef/immutable-utils.git</connection>
-        <developerConnection>scm:git:git@github.com:artnaseef/immutable-utils.git</developerConnection>
-        <url>git@github.com:artnaseef/immutable-utils.git</url>
-      <tag>immutable-utils-0.0.1</tag>
-  </scm>
 
     <dependencies>
         <dependency>
@@ -151,14 +136,31 @@
         </plugins>
     </build>
 
+
+    <!--         -->
+    <!-- PUBLISH -->
+    <!--         -->
+
+    <url>https://github.com/artnaseef/immutable-utils</url>
+
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
             <id>ossrh-releases</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:artnaseef/immutable-utils.git</connection>
+        <developerConnection>scm:git:git@github.com:artnaseef/immutable-utils.git</developerConnection>
+        <url>git@github.com:artnaseef/immutable-utils.git</url>
+        <tag>immutable-utils-0.0.1</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Arthur Naseef</name>
+            <email>artnaseef@apache.com</email>
+        </developer>
+    </developers>
 </project>
