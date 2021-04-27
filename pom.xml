@@ -21,7 +21,7 @@
 
     <groupId>com.artnaseef</groupId>
     <artifactId>immutable-utils</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
     <packaging>jar</packaging>
 
     <name>Immutable Utils</name>
@@ -161,7 +161,7 @@
         <connection>scm:git:git@github.com:artnaseef/immutable-utils.git</connection>
         <developerConnection>scm:git:git@github.com:artnaseef/immutable-utils.git</developerConnection>
         <url>git@github.com:artnaseef/immutable-utils.git</url>
-        <tag>immutable-utils-0.0.1</tag>
+        <tag>immutable-utils-0.0.5</tag>
     </scm>
 
     <developers>
