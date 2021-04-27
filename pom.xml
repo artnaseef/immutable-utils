@@ -130,6 +130,9 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                          <passphraseServerId>${gpg.serverId}</passphraseServerId>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
